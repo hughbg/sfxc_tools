@@ -11,4 +11,3 @@ net_protocol=unix;
 mtu=9000;
 ipd=0;
 mem2sfxc=bits_per_sample : 4;
-mem2sfxc=open : /tmp/stream1;

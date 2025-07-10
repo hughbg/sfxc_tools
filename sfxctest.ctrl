@@ -1,0 +1,22 @@
+{
+    "exper_name": "sfxctest",
+    "cross_polarize": true,
+    "number_channels": 128,
+    "integr_time": 1,
+    "output_file": "file:///home/v66437hg/merlin_git/sfxc/run/sfxctest.cor",
+    "stations": [
+        "Lo",
+        "M2"
+    ],
+    "data_sources": {
+        "Lo": {"DS01": [
+            "mk5:///tmp/stream1/x:0"
+        ]},
+        "M2": {"DS01": [
+            "mk5:///tmp/stream2/x:0"
+        ]}
+    },
+    "start": "2000y001d01h23m20s",
+    "stop":  "2000y002d01h23m20s",
+    "delay_directory": "file:///home/v66437hg/merlin_git/sfxc/run/delays"
+}

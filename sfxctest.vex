@@ -1,0 +1,306 @@
+VEX_rev = 2.0;
+$GLOBAL;
+	ref $EXPER = sfxctest;
+	ref $EOP = Eop01;
+
+*--------------------------------------------------------------------------------
+*---------------------------------    EXPER    ----------------------------------
+*--------------------------------------------------------------------------------
+$EXPER;
+def sfxctest;
+	exper_name = sfxctest;
+	exper_description = "SFXC Testing Experiment";
+	exper_nominal_start = 2000y001d01h23m20s;
+	exper_nominal_stop = 2000y002d01h23m20s;
+	target_correlator = SFXC;
+enddef;
+
+*--------------------------------------------------------------------------------
+*----------------------------------    MODE    ----------------------------------
+*--------------------------------------------------------------------------------
+$MODE;
+def Mode01;
+	ref $FREQ = Freq01:Lo:M2:Pi:Da:Kn:De:Cm;
+	ref $IF = If01:Lo:M2:Pi:Da:Kn:De:Cm;
+	ref $BBC = Bbc01:Lo:M2:Pi:Da:Kn:De:Cm;
+	ref $DATASTREAMS = Datastreams01:Lo:M2:Pi:Da:Kn:De:Cm;
+enddef;
+
+*--------------------------------------------------------------------------------
+*--------------------------------    STATION    ---------------------------------
+*--------------------------------------------------------------------------------
+$STATION;
+def Lo;
+	ref $SITE = LOVELL;
+	ref $ANTENNA = LOVELL;
+	ref $CLOCK = LOVELL;
+	ref $DAS = Das01;
+enddef;
+
+def M2;
+	ref $SITE = MARKII;
+	ref $ANTENNA = MARKII;
+	ref $CLOCK = MARKII;
+	ref $DAS = Das01;
+enddef;
+
+def Pi;
+	ref $SITE = PICKMERE;
+	ref $ANTENNA = PICKMERE;
+	ref $CLOCK = PICKMERE;
+	ref $DAS = Das01;
+enddef;
+
+def Da;
+	ref $SITE = DARNHALL;
+	ref $ANTENNA = DARNHALL;
+	ref $CLOCK = DARNHALL;
+	ref $DAS = Das01;
+enddef;
+
+def Kn;
+	ref $SITE = KNOCKIN;
+	ref $ANTENNA = KNOCKIN;
+	ref $CLOCK = KNOCKIN;
+	ref $DAS = Das01;
+enddef;
+
+def De;
+	ref $SITE = DEFFORD;
+	ref $ANTENNA = DEFFORD;
+	ref $CLOCK = DEFFORD;
+	ref $DAS = Das01;
+enddef;
+
+def Cm;
+	ref $SITE = CAMBRIDGE;
+	ref $ANTENNA = CAMBRIDGE;
+	ref $CLOCK = CAMBRIDGE;
+	ref $DAS = Das01;
+enddef;
+
+*--------------------------------------------------------------------------------
+*----------------------------------    SITE    ----------------------------------
+*--------------------------------------------------------------------------------
+$SITE;
+def LOVELL;
+	site_type = fixed;
+	site_name = LOVELL;
+	site_ID = Lo;
+	site_position = 3822626.040 m: -154105.650 m: 5086486.040 m;
+	site_velocity = 0.0 m/yr : 0.0 m/yr : 0.0 m/yr;
+enddef;
+
+def MARKII;
+	site_type = fixed;
+	site_name = MARKII;
+	site_ID = M2;
+	site_position = 3822626.040 m: -154105.650 m: 5086486.040 m;
+	site_velocity = 0.0 m/yr : 0.0 m/yr : 0.0 m/yr;
+enddef;
+
+def PICKMERE;
+	site_type = fixed;
+	site_name = PICKMERE;
+	site_ID = Pi;
+	site_position = 3822626.040 m: -154105.650 m: 5086486.040 m;
+	site_velocity = 0.0 m/yr : 0.0 m/yr : 0.0 m/yr;
+enddef;
+
+def DARNHALL;
+	site_type = fixed;
+	site_name = DARNHALL;
+	site_ID = Da;
+	site_position = 3822626.040 m: -154105.650 m: 5086486.040 m;
+	site_velocity = 0.0 m/yr : 0.0 m/yr : 0.0 m/yr;
+enddef;
+
+def KNOCKIN;
+	site_type = fixed;
+	site_name = KNOCKIN;
+	site_ID = Kn;
+	site_position = 3822626.040 m: -154105.650 m: 5086486.040 m;
+	site_velocity = 0.0 m/yr : 0.0 m/yr : 0.0 m/yr;
+enddef;
+
+def DEFFORD;
+	site_type = fixed;
+	site_name = DEFFORD;
+	site_ID = De;
+	site_position = 3822626.040 m: -154105.650 m: 5086486.040 m;
+	site_velocity = 0.0 m/yr : 0.0 m/yr : 0.0 m/yr;
+enddef;
+
+def CAMBRIDGE;
+	site_type = fixed;
+	site_name = CAMBRIDGE;
+	site_ID = Cm;
+	site_position = 3822626.040 m: -154105.650 m: 5086486.040 m;
+	site_velocity = 0.0 m/yr : 0.0 m/yr : 0.0 m/yr;
+enddef;
+
+*--------------------------------------------------------------------------------
+*--------------------------------    ANTENNA    ---------------------------------
+*--------------------------------------------------------------------------------
+$ANTENNA;
+def LOVELL;
+	axis_type = az : el;
+	antenna_motion = az : 12.0 deg/min : 2 sec;
+	antenna_motion = el : 12.0 deg/min : 2 sec;
+	axis_offset = 0.00000 m;
+enddef;
+
+def MARKII;
+	axis_type = az : el;
+	antenna_motion = az : 12.0 deg/min : 2 sec;
+	antenna_motion = el : 12.0 deg/min : 2 sec;
+	axis_offset = 0.00000 m;
+enddef;
+
+def PICKMERE;
+	axis_type = az : el;
+	antenna_motion = az : 12.0 deg/min : 2 sec;
+	antenna_motion = el : 12.0 deg/min : 2 sec;
+	axis_offset = 0.00000 m;
+enddef;
+
+def DARNHALL;
+	axis_type = az : el;
+	antenna_motion = az : 12.0 deg/min : 2 sec;
+	antenna_motion = el : 12.0 deg/min : 2 sec;
+	axis_offset = 0.00000 m;
+enddef;
+
+def KNOCKIN;
+	axis_type = az : el;
+	antenna_motion = az : 12.0 deg/min : 2 sec;
+	antenna_motion = el : 12.0 deg/min : 2 sec;
+	axis_offset = 0.00000 m;
+enddef;
+
+def DEFFORD;
+	axis_type = az : el;
+	antenna_motion = az : 12.0 deg/min : 2 sec;
+	antenna_motion = el : 12.0 deg/min : 2 sec;
+	axis_offset = 0.00000 m;
+enddef;
+
+def CAMBRIDGE;
+	axis_type = az : el;
+	antenna_motion = az : 12.0 deg/min : 2 sec;
+	antenna_motion = el : 12.0 deg/min : 2 sec;
+	axis_offset = 0.00000 m;
+enddef;
+
+*--------------------------------------------------------------------------------
+*---------------------------------    CLOCK    ----------------------------------
+*--------------------------------------------------------------------------------
+$CLOCK;
+def LOVELL;
+	clock_early = 2000y001d01h23m20s : 0.0 usec : 2000y002d01h23m20s : 0.0 usec/sec;
+enddef;
+
+def MARKII;
+	clock_early = 2000y001d01h23m20s : 0.0 usec : 2000y002d01h23m20s : 0.0 usec/sec;
+enddef;
+
+def PICKMERE;
+	clock_early = 2000y001d00h00m00s : 0.0 usec : 2000y001d00h00m00s : 0.0 usec/sec;
+enddef;
+
+def DARNHALL;
+	clock_early = 2000y001d00h00m00s : 0.0 usec : 2000y001d00h00m00s : 0.0 usec/sec;
+enddef;
+
+def KNOCKIN;
+	clock_early = 2000y001d00h00m00s : 0.0 usec : 2000y001d00h00m00s : 0.0 usec/sec;
+enddef;
+
+def DEFFORD;
+	clock_early = 2000y001d00h00m00s : 0.0 usec : 2000y001d00h00m00s : 0.0 usec/sec;
+enddef;
+
+def CAMBRIDGE;
+	clock_early = 2000y001d00h00m00s : 0.0 usec : 2000y001d00h00m00s : 0.0 usec/sec;
+enddef;
+
+*--------------------------------------------------------------------------------
+*----------------------------------    EOP    -----------------------------------
+*--------------------------------------------------------------------------------
+$EOP;
+def Eop01;
+	TAI-UTC = 37 sec;
+	eop_ref_epoch = 2000y001d01h23m20s;
+	num_eop_points = 3;
+	eop_interval = 24 hr;
+	ut1-utc = -0.0031534 sec:-0.0033589 sec:-0.0034879 sec;
+	x_wobble = 0.007865 asec: 0.005660 asec: 0.004414 asec;
+	y_wobble = 0.267828 asec: 0.269789 asec: 0.272392 asec;
+enddef;
+
+*--------------------------------------------------------------------------------
+*---------------------------------    SOURCE    ---------------------------------
+*--------------------------------------------------------------------------------
+$SOURCE;
+def 0208-512;
+	source_name = 0208-512;
+	ra = 02h10m46.200;
+	dec = -51d01'01.89";
+	ref_coord_frame = J2000;
+enddef;
+
+*--------------------------------------------------------------------------------
+*----------------------------------    FREQ    ----------------------------------
+*--------------------------------------------------------------------------------
+$FREQ;
+def Freq01;
+	chan_def = : 8000.00 MHz : U : 64.000 MHz : &CH01 : &BBC01 : ;
+	chan_def = : 8000.00 MHz : U : 64.000 MHz : &CH02 : &BBC02 : ;
+enddef;
+
+*--------------------------------------------------------------------------------
+*-----------------------------------    IF    -----------------------------------
+*--------------------------------------------------------------------------------
+$IF;
+def If01;
+	if_def = &IF_L : NA : L : 8000.00 MHz : U;
+	if_def = &IF_R : NA : R : 8000.00 MHz : U;
+enddef;
+
+*--------------------------------------------------------------------------------
+*------------------------------    DATASTREAMS    -------------------------------
+*--------------------------------------------------------------------------------
+$DATASTREAMS;
+def Datastreams01;
+	datastream = &DS01 : VDIF : NA;
+	thread = &DS01 : &THREAD01 : 0 : 2 : 128 Ms/sec : 4 : real : 8000;
+	channel = &DS01 : &THREAD01 : &CH01 : 0;
+	channel = &DS01 : &THREAD01 : &CH02 : 1;
+enddef;
+
+*--------------------------------------------------------------------------------
+*----------------------------------    BBC    -----------------------------------
+*--------------------------------------------------------------------------------
+$BBC;
+def Bbc01;
+	BBC_assign = &BBC01 : 1 : &IF_L;
+	BBC_assign = &BBC02 : 1 : &IF_R;
+enddef;
+
+*--------------------------------------------------------------------------------
+*----------------------------------    DAS    -----------------------------------
+*--------------------------------------------------------------------------------
+$DAS;
+def Das01;
+	record_transport_type = VDIF;
+enddef;
+
+*--------------------------------------------------------------------------------
+*--------------------------------    SCHEDULE    --------------------------------
+*--------------------------------------------------------------------------------
+$SCHED;
+scan No001;
+	start=2000y001d01h23m20s; mode=Mode01; source=0208-512;
+	station=Lo : 0 sec : 60 sec : : : : 1;
+	station=M2 : 0 sec : 60 sec : : : : 1;
+endscan;

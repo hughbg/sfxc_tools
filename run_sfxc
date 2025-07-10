@@ -1,0 +1,79 @@
+#!/bin/sh
+
+NETWORKING=/home/v66437hg/networking
+JIVE=/home/v66437hg/jive5ab
+
+telnet_commands() {
+    # $1: udp port, $2: unix socket number
+
+cat << END
+runtime=0;
+mode=VDIF_8000-128-1-4;
+net_protocol=udps;
+net_port=$1;
+mtu=9000;
+ipd=0;
+net2mem=open;
+runtime=1;
+mode=VDIF_8000-128-1-4;
+net_protocol=unix;
+mtu=9000;
+ipd=0;
+mem2sfxc=bits_per_sample : 4;
+mem2sfxc=open : /tmp/stream${2};
+END
+}
+
+#DISCARD="-x 5"
+DISCARD=""
+
+# geometry spec is width x height {+-}xoffset {+-} yoffset
+
+run_jive() {
+    # $1: udp network port, $2, unix socket number, $3: telnet port, $4: geometry
+
+    rm -r /tmp/stream${2}
+    gnome-terminal --title="jive5ab, stream $1 -> $2" --geometry $4 -- $JIVE/install/bin/jive5ab -p $3
+    sleep 1
+
+    telnet_commands $1 $2 | telnet localhost $3
+}
+
+run_spoof() {
+    # $1: unix socket number, $2: geometry
+    gnome-terminal --title="spoof sfxc, read unix stream $1" --geometry $2 -- $NETWORKING/spoof_sfxc /tmp/stream${1}
+}
+
+run_vdif_stream() {
+    # $1: udp network port, $2: geometry
+    gnome-terminal --title="create vdif -> $1" --geometry $2 -- $NETWORKING/create_vdif -s 4990 -d 30 $DISCARD -u 300 127.0.0.1 $1
+}
+
+run_jive_transfer() {
+    # $1: udp network port, $2, unix socket number, $3: telnet port
+
+    run_jive $1 $2 $3 "100x40+100+100"
+    sleep 2
+
+    run_spoof $2 "160x40+400+400"
+    sleep 2
+
+    run_vdif_stream $1 "40x40+300+300"
+
+}
+
+run_spoof() {
+  run_jive_transfer 22001 1 2620
+  run_jive_transfer 22002 2 2621
+}
+
+run_vdif_stream 22001 "40x40+300+300"
+run_vdif_stream 22002 "40x40+310+310"
+run_jive 22001 1 2620 "100x40+100+100"
+run_jive 22002 2 2621 "100x40+110+110"
+
+sleep 5
+bash startsfxc.sh
+
+
+
