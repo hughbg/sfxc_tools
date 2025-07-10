@@ -1,0 +1,14 @@
+runtime=0;
+mode=VDIF_8000-128-1-4;
+net_protocol=udps;
+net_port=22001;
+mtu=9000;
+ipd=0;
+net2mem=open;
+runtime=1;
+mode=VDIF_8000-128-1-4;
+net_protocol=unix;
+mtu=9000;
+ipd=0;
+mem2sfxc=bits_per_sample : 4;
+mem2sfxc=open : /tmp/stream1;

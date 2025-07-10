@@ -1,0 +1,24 @@
+#!/bin/sh
+
+NETWORKING=/home/v66437hg/networking
+JIVE=/home/v66437hg/jive5ab
+
+DISCARD="-x 5"
+#DISCARD=""
+
+rm /tmp/stream1
+
+gnome-terminal --title="jive5ab" --geometry 100x40+100+100 -- $JIVE/install/bin/jive5ab -p 2620
+sleep 1
+cat commands.txt | telnet localhost 2620
+
+sleep 1
+
+gnome-terminal --title="spoof sfxc" --geometry 160x40+400+400 -- $NETWORKING/spoof_sfxc /tmp/stream1
+sleep 5
+gnome-terminal --title="create vdif" --geometry 40x40+300+300 -- $NETWORKING/create_vdif -d 25 $DISCARD -u 300 127.0.0.1 22001
+
+
+
+# look at spoof vdif output with scan_sfxc_gets reading vheader output
+

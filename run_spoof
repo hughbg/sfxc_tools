@@ -1,0 +1,6 @@
+#!/bin/sh
+
+source path.sh
+
+( sleep 1; $NETWORKING/create_vdif -d 45 -x 5 -u 100 127.0.0.1 22001 ) &
+$NETWORKING/spoof_sfxc /tmp/stream1 
