@@ -1,7 +1,7 @@
 import sys
 
-if len(sys.argv) != 2:
-    print("Usage: inspect_sfxgpu_ctrl_inputs.py control_parameters_code")
+if len(sys.argv) != 3:
+    print("Usage: inspect_sfxgpu_ctrl_inputs.py control_parameters_code ctr_file")
     exit(1)
 
 lines = open(sys.argv[1]).readlines()
@@ -23,14 +23,14 @@ print("Fields expected in control file:\n\n", fields)
 
 import json
 
-with open("/home/v66437hg/merlin_git/sfxc/run/sfxctest.ctrl") as f:
-
+with open(sys.argv[2]) as f:
     params = json.load(f)
+
 print()
 print("Expected fields present in control file:\n")
 for p in params:
     if p in fields:
-        print(p+":", params[p])
+        print(p)
 
 print()
 print("Expected fields missing from control file:\n")
@@ -42,5 +42,5 @@ print()
 print("Unexpected fields in control file:\n")
 for p in params:
     if p not in fields:
-        print(p+":", params[p])
+        print(p)
 
