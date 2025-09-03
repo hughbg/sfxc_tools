@@ -30,7 +30,7 @@ print()
 print("Expected fields present in control file:\n")
 for p in params:
     if p in fields:
-        print(p)
+        print(p+":", params[p])
 
 print()
 print("Expected fields missing from control file:\n")
@@ -42,5 +42,5 @@ print()
 print("Unexpected fields in control file:\n")
 for p in params:
     if p not in fields:
-        print(p)
+        print(p+":", params[p])
 

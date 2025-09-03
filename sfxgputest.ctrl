@@ -1,0 +1,99 @@
+{
+    "_comment_": "fftsize_correlation can be missing as it is generated from nchan. dummy_correlation can be missing and its default is false",
+    
+    "exper_name": "sfxgputest",
+
+    "integr_time": 2,
+    "output_file": "output/sfxctest.cor",
+    "stations": [
+        "Lo",
+        "M2"
+    ],
+
+    "_comment0_": "The start and stop time are not the experiment start/stop but the source scan start/stop calculated from these vex lines",
+    "_comment0a_":"    start=2000y001d01h23m20s; mode=Mode01; source=0208-512;   ",
+    "_comment0b_":"    station=Lo : 0 sec : 60 sec : : : : 1;                    ",
+
+    "start": "2000y001d01h23m20s",
+    "stop":  "2000y001d01h24m20s",
+    "delay_directory": "delays",
+
+    "sources": [ "0208-512" ],
+
+    "__comment0c_": "The clocks info comes from the vex file",
+    "clocks": {
+        "Lo": [ "2000y001d01h23m20s", 0.0, "2000y001d01h24m20s", 0.0 ],
+        "M2": [ "2000y001d01h23m20s", 0.0, "2000y001d01h24m20s", 0.0 ]
+    },
+
+    "_comment0d_": "nchan is the number of output channels",
+    "nchan": 256,
+
+    "_comment0e_": "Currently only 2 channels are allowed: l and r polarisation. This is mentioned in the code.",
+    "channels": [ "RCP", "LCP" ],
+    "channel_config": {
+        "Lo": {
+            "threads": "THREAD1",
+            "freq": "FREQ1"
+        },
+        "M2": {
+            "threads": "THREAD1",
+            "freq": "FREQ1"
+        }
+    },
+
+    "_comment1_": "These 'thread' and 'channel' values are meant to index the VDIF",
+    "threads": {
+        "THREAD1": {
+            "channels": {
+                "LCP": {
+                    "thread": 0,
+                    "channel": 0
+                },
+                "RCP": {
+                    "thread": 0,
+                    "channel": 1
+                }
+            }
+        }
+    },
+
+    "_comment2_": "These 'frequency', 'bandwidth' etc. values are physical parameters of the observation",
+    "freq": {
+        "FREQ1": {
+            "LCP": {
+                "frequency":  8000,
+                "bandwidth":  64,
+                "sideband":   "u",
+                "polarisation":  "l",
+                "frequency_nr": 1
+                },
+            "RCP": {
+                "frequency":  8000,
+                "bandwidth":  64,
+                "sideband":   "u",
+                "polarisation":  "r",
+                "frequency_nr": 2
+                }
+            }
+        },
+
+    "_comment3_":  "These 'files', 'framesize' etc. values are properties of the input VDIFs",
+    "_comment3a_": "The frame_size is the data array size in bytes, doesn't include header",
+    "data_sources": {
+        "Lo": {
+            "files": [ "/home/v66437hg/sfxgpu_and_requires/sfxgpu/src/x.vdif" ],
+            "frame_size": 8000,
+            "nthread": 1,
+            "nchannel": 2
+        },
+        "M2": {
+            "files": [ "/home/v66437hg/sfxgpu_and_requires/sfxgpu/src/x.vdif" ],
+            "frame_size": 8000,
+            "nthread": 1,
+            "nchannel": 2
+        }
+    }
+
+
+}
