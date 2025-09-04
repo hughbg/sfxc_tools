@@ -1,13 +1,15 @@
 import pickle, numpy as np
 import matplotlib.pyplot as plt
 
-measures_to_plot = [ "host-to-device,time", "device-to-host,time", "host-to-device,rate", "device-to-host,rate", "correlate-real,time", "correlate-sequential,time" ]
+measures_to_plot = [ "host-to-device,time", "device-to-host,time", "host-to-device,rate", "device-to-host,rate", "correlate-gpu,time", "correlate-sequential,time" ]
 
 
 def do_scaling_plots():
     with open("timings.pkl","rb") as _file:
         all_timings = pickle.load(_file)
     assert len(all_timings) == 3, "# parameters not recorded properly"
+
+
 
     # What we have in a timing: there are 5 input parameters, nrReceivers etc. and a list for each one with values.
     # Which parameters are changing in those lists is in whats_changing. Then there the output statistics,
