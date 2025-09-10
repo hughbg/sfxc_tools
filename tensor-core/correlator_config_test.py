@@ -3,10 +3,21 @@ import os
 
 PROG = "./build/test/CorrelatorTest/CorrelatorTest"
 
-NUM_TELESCOPES = 7
-BANDWIDTH = 64000000
-NUM_CHANNELS = 2048
-INTEGRATION_TIME = 0.5  # s
+NETWORK = "evn"
+
+if NETWORK == "emerlin":
+    NUM_TELESCOPES = 7
+    BANDWIDTH = 64000000            # A higher sample rate means more FFTs need to be done for the integration time
+    NUM_CHANNELS = 4096
+    INTEGRATION_TIME = 0.5  # s
+
+elif NETWORK == "evn":
+    NUM_TELESCOPES = 16
+    BANDWIDTH = 64000000
+    NUM_CHANNELS = 1024
+    INTEGRATION_TIME = 0.1  # s
+
+
 
 assert int(NUM_TELESCOPES) == NUM_TELESCOPES, "Num telescopes is not integer"
 assert int(NUM_CHANNELS) == NUM_CHANNELS, "Num channels is not integer"
@@ -16,10 +27,17 @@ print("NUM_TELESCOPES", NUM_TELESCOPES, "BANDWIDTH", BANDWIDTH, "NUM_CHANNELS", 
 
 sampling_rate = BANDWIDTH*2
 spectral_resolution = BANDWIDTH/NUM_CHANNELS
-fft_length_in_seconds = 1/spectral_resolution
-input_fft_length_in_samples = 2*NUM_CHANNELS    # sampling_rate*fft_length_in_seconds
+fft_length_in_seconds = 1/spectral_resolution   # NUM_CHANNELS/BANDWIDTH
+input_fft_length_in_samples = 2*NUM_CHANNELS    # sampling_rate*fft_length_in_seconds. Assuming real fft then output len is NUM_CHANNELS.
 
-print("Spectral resolution:", spectral_resolution, "(Hz) FFT length (nanosec):", fft_length_in_seconds*1e9, "FFT length (samples):", input_fft_length_in_samples)
+print("Spectral resolution:", spectral_resolution, "(Hz) FFT length (nanosec):", fft_length_in_seconds*1e9, "Input FFT length (samples):", input_fft_length_in_samples)
+
+"""
+# Use numpy to verify these values fit together. Assuming fft not rfft here.
+fftfreq = np.fft.fftfreq(input_fft_length_in_samples, 1/sampling_rate)
+assert spectral_resolution == fftfreq[1]-fftfreq[0]
+assert fftfreq.size//2 == NUM_CHANNELS
+"""
 
 # Check integers and multiples so things fit.
 
@@ -47,14 +65,17 @@ data = data.reshape(NUM_TELESCOPES, samples_in_integration//input_fft_length_in_
 data = data[:, :, :data.shape[2]//2]
 
 
-print("For a real FFT the FFT output length (samples) will be ~half the input length:", data.shape[2], "But it will be complex.")
-print("With an integration time of "+str(INTEGRATION_TIME)+"s,", data.shape[1], "FFTs are made, giving data block",
-      NUM_TELESCOPES, "x", data.shape[1], "x", data.shape[2])
+print("With an integration time of "+str(INTEGRATION_TIME)+"s,", samples_in_integration//input_fft_length_in_samples, "FFTs are made, giving data block",
+      NUM_TELESCOPES, "x", NUM_CHANNELS, "x", samples_in_integration//input_fft_length_in_samples)
+
 
 # Prepare for Tensor-Core
-nrReceivers = data.shape[0]
-nrSamplesPerChannel = data.shape[1]
-nrChannels = data.shape[2]
+nrReceivers = NUM_TELESCOPES
+nrBaselines = (nrReceivers*(nrReceivers+1))//2
+nrChannels = NUM_CHANNELS
+nrSamplesPerChannel = samples_in_integration//input_fft_length_in_samples
+
+
 
 # Another restriction from Tensor-Core
 if nrSamplesPerChannel%8 != 0:
@@ -62,6 +83,9 @@ if nrSamplesPerChannel%8 != 0:
     nrSamplesPerChannel = int(nrSamplesPerChannel)//8*8
     print(nrSamplesPerChannel)
     print("Integration time is now", fft_length_in_seconds*nrSamplesPerChannel)
+
+
+print("Problem size", nrBaselines*nrChannels*nrSamplesPerChannel*2*2)
 
 
 # Correlator test options

@@ -1,8 +1,9 @@
 import subprocess
+import matplotlib.pyplot as plt
 import time
 import numpy as np
 
-from tensor_core_test_plots import do_scaling_plots, do_ch_bl_plots
+from tensor_core_test_plots import do_scaling_plots, do_ch_bl_plots, do_int_time_plots
 import pickle
 
 PROG = "./build/test/CorrelatorTest/CorrelatorTest"
@@ -59,13 +60,18 @@ def increasing_test(nrChannels, nrReceivers, nrSamplesPerChannel, whats_changing
         # Do the repeats and keep them in a temporary dict
         for iter in range(NUM_REPEATS):
 
-            # Correlator test
-            command = PROG+" -V 0 -I fp16 -c "+str(nrChannels[i])+" -n "+str(nrReceivers[i])+" -N 32 -r 1 -R 1 -t "+str(int(nrSamplesPerChannel[i]))
-            output = subprocess.check_output(command.split()).decode()
+            try:
+                # Correlator test
+                command = PROG+" -V 0 -I fp16 -c "+str(nrChannels[i])+" -n "+str(nrReceivers[i])+" -N 32 -r 1 -R 1 -t "+str(int(nrSamplesPerChannel[i]))
+                output = subprocess.check_output(command.split()).decode()
+            except:
+                print("GPU run failed. Stopping.")
+                return timings
 
             # correlator serial in C
             command = "./correlator_sequential "+str(nrChannels[i])+" "+str(nrReceivers[i])+" "+str(nrSamplesPerChannel[i])
             output1 = subprocess.check_output(command.split()).decode()
+
 
             output += output1
 
@@ -144,8 +150,27 @@ def init_lists_ch_bl():
 
     return nrC, nrR, nrS
 
+def init_lists_int_time(num_telescopes, bandwidth, num_channels):
+
+    integration_times = np.array([0.1, 0.5, 2, 3, 4, 5, 6, 7, 8])
+
+    input_fft_length_in_samples = 2*num_channels
+    sampling_rate = bandwidth*2
+
+    nrS = np.zeros(integration_times.size, dtype=int)
+    for i, it in enumerate(integration_times):
+        nrS[i] = int(np.round(sampling_rate*it/input_fft_length_in_samples))
+        nrS[i] = nrS[i]//8*8      # have to be multiple of 8
+
+    nrC = np.full(integration_times.size, num_channels)
+    nrR = np.full(integration_times.size, num_telescopes)
+
+    return nrC, nrR, nrS, integration_times
+
+
 
 def do_scaling_tests():
+    print("Scaling tests")
 
     order = [ "nrChannels", "nrReceivers", "nrSamplesPerChannel" ]
     all_timings = []
@@ -160,7 +185,8 @@ def do_scaling_tests():
     do_scaling_plots()
 
 def do_ch_bl_tests():
-    nrCs, nrRs, nrSs = init_lists_ch_bl()
+    print("Channel vs Baseline tests")
+    nrCs, nrRs, nrSs, int_times = init_lists_ch_bl()
 
     timings = increasing_test(nrCs, nrRs, nrSs, "all")
 
@@ -168,7 +194,33 @@ def do_ch_bl_tests():
         pickle.dump(timings, f)
 
     do_ch_bl_plots()
-     
+
+def do_int_time_tests():
+    print("Integration time tests, emerlin")
+    nrCs, nrRs, nrSs, int_times = init_lists_int_time(2, 64000000, 4096)      # emerlin
+
+    timings = increasing_test(nrCs, nrRs, nrSs, "nrSamplesPerChannel")
+    timings["integration_times"] = int_times
+
+    with open("emerlin_int_time_timings.pkl","wb") as f:
+        pickle.dump(timings, f)
+
+    do_int_time_plots("emerlin")
+
+    print("integration time tests, EVN")
+    nrCs, nrRs, nrSs, int_times = init_lists_int_time(2, 32000000, 1024)      # EVN
+
+    timings = increasing_test(nrCs, nrRs, nrSs, "nrSamplesPerChannel")
+    timings["integration_times"] = int_times
+
+    with open("evn_int_time_timings.pkl","wb") as f:
+        pickle.dump(timings, f)
+
+    do_int_time_plots("evn")
+
+do_int_time_tests()
+
+
 do_scaling_tests()
 do_ch_bl_tests()
 

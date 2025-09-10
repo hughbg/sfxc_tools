@@ -162,10 +162,37 @@ def do_ch_bl_plots():
         #plt.xlim(xmin=-1000, xmax=65000)
         plt.savefig("ch_bl_"+meas)
 
+def do_int_time_plots(prefix):
+
+    with open(prefix+"_int_time_timings.pkl","rb") as _file:
+        timing = pickle.load(_file)
+
+    # All integration times may not have completed so beware
+    plt.figure(figsize=(8, 8))
+    plt.clf()
+    plt.subplot(2, 1, 1)
+    num_completed = len(timing["correlate-gpu"]["time"])
+    plt.plot(timing["integration_times"][:num_completed], timing["correlate-gpu"]["time"])
+    plt.title("correlate-gpu time")
+    #plt.xlabel("Integration time")
+    plt.ylabel("Time [s]")
+    plt.ylim(ymin=0)
+    plt.subplot(2, 1, 2)
+    num_completed = len(timing["host-to-device"]["time"])
+    plt.plot(timing["integration_times"][:num_completed], timing["host-to-device"]["time"])
+    plt.ylim(ymin=0)
+    plt.title("host-to-device time")
+    plt.xlabel("Integration time")
+    plt.ylabel("Time [s]")
+
+    plt.tight_layout()
+    plt.savefig(prefix+"_int_time")
+
 
 
 if __name__ == "__main__":
-    do_scaling_plots()
-    do_ch_bl_plots()
+    #do_scaling_plots()
+    #do_ch_bl_plots()
+    do_int_time_plots("emerlin")
         
 
